@@ -6,7 +6,7 @@ This review covers the supplied script blocks (`@main`, `@init`, `@varReset`, `@
 
 ## High-risk logic bugs
 
-1. **Potential off-by-one / mixed indexing across lists and table lookups**  
+1. **Potential off-by-one（索引差1） / mixed indexing across lists and table lookups**  
    The script mixes 0-based (`L$title[0]`) and 1-based (`n$j 1`, table row access with index 1+) assumptions. In `@init`, `n$titleNum = tbl_size - 1`, then loop starts from `n$j=1`. In `@btn1Handler`, loop uses `n$i` starting at 0 and reads `L$title[n$i]`. This can desync lookup IDs and displayed data.
    - **Fix:** standardize index convention globally (prefer 0-based for lists and explicit mapping for table rows).
 
