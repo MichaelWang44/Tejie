@@ -6,9 +6,7 @@ This review covers the supplied script blocks (`@main`, `@init`, `@varReset`, `@
 
 ## High-risk logic findings
 
-1. **Dynamic variable-name construction can cause name collision risk**  
-   `mov n$<$str(s$titleName)> <$str(n$j)>` creates runtime variable names from CSV values.
-   - **Action:** replace dynamic variable names with explicit list/map storage.
+No unresolved high-risk logic issues remain after applying current author-note constraints.
 
 ## Confirmed assumptions / author notes
 
@@ -22,6 +20,7 @@ This review covers the supplied script blocks (`@main`, `@init`, `@varReset`, `@
    - `n$btn1 = 0` renders Button 1 content (default view)
    - `n$btn1 = 1` renders Button 2 content
    This is intentional and lifecycle-consistent with engine conventions.
+8. Dynamic variable names are intentionally used to simulate key-value storage in current engine constraints.
 
 ## Medium-risk runtime findings
 
@@ -59,12 +58,12 @@ This review covers the supplied script blocks (`@main`, `@init`, `@varReset`, `@
    - render tab body,
    - open dialog.
 2. Use `n$titleCount`-derived bounds.
-3. Replace dynamic-name variable mapping with explicit map/list.
+3. If engine capability allows in future, replace dynamic-name mapping with explicit map/list.
 4. Add a boundary helper for previous/current/next title selection.
 
 ## Priority order
 
 1. Initialize handler-local runtime variables at handler entry points.
 2. Replace fixed bounds with data-driven bounds from `n$titleCount`.
-3. Replace dynamic-name variable mapping with explicit map/list.
+3. Add inline comments for dynamic-name key-value simulation intent and required naming constraints.
 4. Add inline comments where intentional TeaJie `#if` scope-reset pattern is used.
