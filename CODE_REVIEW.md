@@ -14,7 +14,7 @@ No unresolved high-risk logic issues remain after applying current author-note c
 2. CSV table rows are intentionally 1-based.
 3. Table-row to list-index conversion is explicit: `listIndex = tableRowIndex - 1`.
 4. `@getRPQualifiedIndex` is intentionally implemented with `n$rawRPIndex` (internal baseline) and `n$rpIndex` (final qualified index).
-5. In TeaJie engine, each `#if` controls following `#act` statements. Unconditional `#if` blocks in `@btn1Handler` are intentional scope resets.
+5. In TeJie engine, each `#if` controls following `#act` statements. Unconditional `#if` blocks in `@btn1Handler` are intentional scope resets.
 6. In Special Ring engine, `n$` variables are default-initialized to `0`.
 7. `n$btn1` is intentionally a tab selector enum (not a boolean active flag):
    - `n$btn1 = 0` renders Button 1 content (default view)
