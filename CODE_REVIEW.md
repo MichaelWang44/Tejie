@@ -6,11 +6,7 @@ This review covers the supplied script blocks (`@main`, `@init`, `@varReset`, `@
 
 ## High-risk logic findings
 
-1. **`n$btn1` state naming does not match branch usage**  
-   In `@diagDataHandler`, `equal n$btn1 0` routes to `@btn1Handler`, while `@btn1` writes `n$btn1 0` and `@btn2` writes `n$btn1 1`.
-   - **Action:** replace split flags with one explicit tab state (for example `n$activeTab`), and branch by tab constant.
-
-2. **Dynamic variable-name construction can cause name collision risk**  
+1. **Dynamic variable-name construction can cause name collision risk**  
    `mov n$<$str(s$titleName)> <$str(n$j)>` creates runtime variable names from CSV values.
    - **Action:** replace dynamic variable names with explicit list/map storage.
 
@@ -21,6 +17,11 @@ This review covers the supplied script blocks (`@main`, `@init`, `@varReset`, `@
 3. Table-row to list-index conversion is explicit: `listIndex = tableRowIndex - 1`.
 4. `@getRPQualifiedIndex` is intentionally implemented with `n$rawRPIndex` (internal baseline) and `n$rpIndex` (final qualified index).
 5. In TeaJie engine, each `#if` controls following `#act` statements. Unconditional `#if` blocks in `@btn1Handler` are intentional scope resets.
+6. In Special Ring engine, `n$` variables are default-initialized to `0`.
+7. `n$btn1` is intentionally a tab selector enum (not a boolean active flag):
+   - `n$btn1 = 0` renders Button 1 content (default view)
+   - `n$btn1 = 1` renders Button 2 content
+   This is intentional and lifecycle-consistent with engine conventions.
 
 ## Medium-risk runtime findings
 
@@ -45,26 +46,25 @@ This review covers the supplied script blocks (`@main`, `@init`, `@varReset`, `@
    - **Action:** consolidate through helper label or table-driven descriptor.
 
 3. Variable naming is mixed and heavily abbreviated (`n$i`, `n$j`, `s$show`).
-   - **Action:** use role-based naming for state and UI buffers.
+   - **Action:** use role-based naming for state and UI buffers where practical.
 
 4. `@btn1Handler` includes multiple responsibilities.
    - **Action:** split into data-preparation and rendering labels.
 
 ## Refactor direction
 
-1. Use a single `n$activeTab` state.
-2. Centralize rendering flow (`renderDialog(activeTab, pageIndex)` pattern):
+1. Centralize rendering flow (`renderDialog(tabIndex, pageIndex)` pattern):
    - clear buffers,
    - render shared header/tab,
    - render tab body,
    - open dialog.
-3. Use `n$titleCount`-derived bounds.
-4. Replace dynamic-name variable mapping with explicit map/list.
-5. Add a boundary helper for previous/current/next title selection.
+2. Use `n$titleCount`-derived bounds.
+3. Replace dynamic-name variable mapping with explicit map/list.
+4. Add a boundary helper for previous/current/next title selection.
 
 ## Priority order
 
-1. Replace button-state flags with `n$activeTab`.
-2. Initialize handler-local runtime variables at handler entry points.
-3. Replace fixed bounds with data-driven bounds from `n$titleCount`.
+1. Initialize handler-local runtime variables at handler entry points.
+2. Replace fixed bounds with data-driven bounds from `n$titleCount`.
+3. Replace dynamic-name variable mapping with explicit map/list.
 4. Add inline comments where intentional TeaJie `#if` scope-reset pattern is used.
